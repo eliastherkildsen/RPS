@@ -1,0 +1,10 @@
+# Moduels
+node_modules
+# build
+dist
+# IDE
+.idea
+# logging
+logs
+# ENV
+config/middleware.env
