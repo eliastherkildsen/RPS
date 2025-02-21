@@ -9,7 +9,10 @@ export class GameEndpoints {
     private _gameService : GameService;
 
 
-    public registerPlayer(name : string, res){
+    public registerPlayer(req, res){
+
+        if (!req.params.name) return res.status(400).send("Please provide a name")
+        const name = req.params.name;
 
         if (this._gameStatus === EGameStatus.InProgress) {
             return res.status(400).send({message: 'Game is in progress, please end it first: /api/stop'});
@@ -21,11 +24,16 @@ export class GameEndpoints {
         return res.status(200).send({message: `Player registered with name ${this._player.name}`});
     }
 
-    public playGame(hand : string, res){
+    public playGame(req, res){
+
+        // Validating user input.
+        if (!req.params.hand) return res.status(400).send("Please provide a hand, Rock, Paper or Scissors")
 
         if (this._gameStatus === EGameStatus.Ended || this._gameStatus === EGameStatus.Ready ) {
             return res.status(400).send({message: 'Game is not in progress, please register player first: /api/register/:name'});
         }
+
+        const hand = req.params.hand;
 
         // Converting hand into enum type.
         const parsedHand = GameService.parsePlayerHand(hand);

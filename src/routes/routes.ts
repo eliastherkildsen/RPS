@@ -42,26 +42,13 @@ const game = new GameEndpoints();
 
 const authenticator = new UserAuthenticator(LoginTokenProvider, RefreshTokenProvider);
 
-routes.post('/api/login', (req, res) => {
-    return authenticator.login(req, res)
-})
+// AUTH ENDPOINTS
+routes.post('/api/login', (req, res) => authenticator.login(req, res))
+routes.post('/api/register', (req, res) => authenticator.register(req, res))
 
-routes.post('/api/register', (req, res) => {
-    return authenticator.register(req, res)
-})
-
-routes.get('/api/start/:name', (req, res) => {
-    const name = req.params.name;
-    return game.registerPlayer(name, res);
-})
-
-routes.get('/api/play/:hand', (req, res) => {
-    const hand = req.params.hand;
-    return game.playGame(hand, res);
-})
-
-routes.get('/api/stop', (req, res) => {
-    return game.endGame(req ,res)
-})
+// ROCK PAPER SCISSORS GAME ENDPOINTS
+routes.get('/api/start/:name', (req, res) => game.registerPlayer(req, res))
+routes.get('/api/play/:hand', (req, res) => game.playGame(req, res))
+routes.get('/api/stop', (req, res) => game.endGame(req ,res))
 
 export {routes}
