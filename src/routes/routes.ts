@@ -7,6 +7,7 @@ import ITokenProvider from "../InterfaceAdapters/ITokenProvider";
 import TokenProviderFactory, {EProviders} from "../Infrastructure/TokenService/TokenProviderFactory.js";
 import morganMiddleware from "../Infrastructure/Logger/morganMiddleware.js";
 import {UserAuthenticator} from "../endpoints/UserAuthenticator.js";
+import {GameEndpoints} from "../endpoints/GameEndpoints.js";
 
 
 dotenv.config({ path: 'config/middleware.env' });
@@ -37,6 +38,8 @@ const RefreshTokenProvider : ITokenProvider = TokenProviderFactory.CreateFactory
     "expiresIn": REFRESH_TOKEN_EXPIRATION_TIME
 });
 
+const game = new GameEndpoints();
+
 const authenticator = new UserAuthenticator(LoginTokenProvider, RefreshTokenProvider);
 
 routes.post('/api/login', (req, res) => {
@@ -45,6 +48,20 @@ routes.post('/api/login', (req, res) => {
 
 routes.post('/api/register', (req, res) => {
     return authenticator.register(req, res)
+})
+
+routes.get('/api/start/:name', (req, res) => {
+    const name = req.params.name;
+    return game.registerPlayer(name, res);
+})
+
+routes.get('/api/play/:hand', (req, res) => {
+    const hand = req.params.hand;
+    return game.playGame(hand, res);
+})
+
+routes.get('/api/stop', (req, res) => {
+    return game.endGame(req ,res)
 })
 
 export {routes}

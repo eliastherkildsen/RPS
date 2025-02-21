@@ -7,12 +7,11 @@ export enum EGameState {
 export enum EGameStatus {
     Ready,
     InProgress,
-    Finished,
     Ended
 }
 
 export enum EGameHand {
-    Rock,
-    Paper,
-    Scissors
+    Rock = 'rock',
+    Paper= 'paper',
+    Scissors = 'scissors'
 }
